@@ -267,9 +267,190 @@ function recursive(parameters) {
 
 ---
 
+## 🧠 How Recursion Uses Stack Memory
+
+### Memory Model Overview:
+```
+Memory Layout:
+┌─────────────┐
+│ Code Section│ ← Machine code of functions (main, fun1, fun2, etc.)
+├─────────────┤
+│    Stack    │ ← Activation records created here
+├─────────────┤
+│    Heap     │ ← Dynamic memory allocation
+└─────────────┘
+```
+
+### What is an Activation Record?
+- **Definition**: Memory space created for each function call
+- **Contains**: Local variables, parameters, return address
+- **Lifecycle**: Created when function called, deleted when function returns
+
+---
+
+## 📊 Stack Execution for fun1() - Example
+
+### Code Reminder:
+```c
+void fun1(int n) {
+    if (n > 0) {
+        printf("%d ", n);    // Print first
+        fun1(n - 1);         // Then recurse
+    }
+}
+// Call: fun1(3)
+```
+
+### Step-by-Step Stack Creation:
+
+#### Phase 1: Calling Phase (Stack Building)
+```
+Step 1: main() calls fun1(3)
+Stack: [main: x=3] → [fun1: n=3]
+
+Step 2: fun1(3) prints 3, calls fun1(2)  
+Stack: [main: x=3] → [fun1: n=3] → [fun1: n=2]
+
+Step 3: fun1(2) prints 2, calls fun1(1)
+Stack: [main: x=3] → [fun1: n=3] → [fun1: n=2] → [fun1: n=1]
+
+Step 4: fun1(1) prints 1, calls fun1(0)
+Stack: [main: x=3] → [fun1: n=3] → [fun1: n=2] → [fun1: n=1] → [fun1: n=0]
+
+Step 5: fun1(0) - Base case, n not > 0, returns immediately
+```
+
+#### Phase 2: Returning Phase (Stack Unwinding)
+```
+Step 6: fun1(0) ends, activation record deleted
+Stack: [main: x=3] → [fun1: n=3] → [fun1: n=2] → [fun1: n=1]
+
+Step 7: fun1(1) ends, activation record deleted  
+Stack: [main: x=3] → [fun1: n=3] → [fun1: n=2]
+
+Step 8: fun1(2) ends, activation record deleted
+Stack: [main: x=3] → [fun1: n=3]
+
+Step 9: fun1(3) ends, activation record deleted
+Stack: [main: x=3]
+
+Step 10: main() ends
+Stack: []
+```
+
+---
+
+## 📈 Stack Execution for fun2() - Example
+
+### Code Reminder:
+```c
+void fun2(int n) {
+    if (n > 0) {
+        fun2(n - 1);         // Recurse first
+        printf("%d ", n);    // Then print
+    }
+}
+// Call: fun2(3)
+```
+
+### Key Difference in Stack Usage:
+
+#### Calling Phase (Same Stack Building):
+```
+Stack grows: [main] → [fun2:n=3] → [fun2:n=2] → [fun2:n=1] → [fun2:n=0]
+No printing happens during this phase!
+```
+
+#### Returning Phase (Print During Unwinding):
+```
+fun2(0) returns → Stack: [main] → [fun2:n=3] → [fun2:n=2] → [fun2:n=1]
+fun2(1) prints 1 → Stack: [main] → [fun2:n=3] → [fun2:n=2]  
+fun2(2) prints 2 → Stack: [main] → [fun2:n=3]
+fun2(3) prints 3 → Stack: [main]
+```
+
+### 🔍 **Key Insight**: 
+- **Same stack structure** for both functions
+- **Different timing** of when operations execute
+- **Values preserved** in activation records until needed
+
+---
+
+## 💾 Memory Analysis
+
+### Stack Size Calculation:
+- **For fun1(n) or fun2(n)**: n + 1 activation records created
+  - fun(n), fun(n-1), fun(n-2), ..., fun(1), fun(0)
+  - Total calls = n + 1
+
+### Memory Consumption:
+```
+Space Complexity = O(n)
+
+Why?
+- Each activation record stores: 1 integer parameter (n)  
+- Total activation records: n + 1
+- Space = (n + 1) × size_of_integer
+- In Big O notation: O(n) [we ignore constants and lower terms]
+```
+
+### Memory Usage Examples:
+| Function Call | Activation Records | Memory Usage |
+|---------------|-------------------|--------------|
+| fun1(3) | 4 records | O(3) = O(n) |
+| fun1(5) | 6 records | O(5) = O(n) |
+| fun1(100) | 101 records | O(100) = O(n) |
+
+---
+
+## ⚠️ Important Memory Insights
+
+### Why Recursion Consumes More Memory:
+1. **Stack Overhead**: Each function call creates activation record
+2. **Accumulation**: Records stack up during calling phase
+3. **Peak Usage**: Maximum memory used when deepest call is active
+
+### Memory vs Loops:
+```
+Loop:      Constant memory O(1) - reuses same variables
+Recursion: Linear memory O(n) - creates n activation records
+```
+
+### Stack Overflow Risk:
+- **Problem**: Too many recursive calls can exhaust stack memory
+- **When**: For very large values of n
+- **Solution**: Consider iterative approaches or tail recursion
+
+---
+
+## 🎯 Key Stack Concepts Summary
+
+### The Stack Lifecycle:
+1. **Build Up**: Activation records created during calling phase
+2. **Peak**: Maximum stack size when base case reached  
+3. **Unwind**: Records deleted during returning phase
+4. **Clean**: Stack returns to original state
+
+### Memory Efficiency:
+- **Space Complexity**: O(n) for both fun1() and fun2()
+- **Hidden Cost**: Stack memory is "invisible" but real
+- **Trade-off**: Elegance of recursion vs memory efficiency of iteration
+
+### Visual Memory Pattern:
+```
+Calling:   [] → [n] → [n][n-1] → [n][n-1][n-2] → ... → [n][n-1]...[0]
+           ↑                                              ↑
+         Start                                        Peak Memory
+           
+Returning: [n][n-1]...[0] → [n][n-1]...[1] → ... → [n] → []
+           ↑                                              ↑  
+       Peak Memory                                    Back to Start
+```
+
+---
+
 ## 🔗 Next Topics
-- How recursion uses the stack internally
-- Time complexity analysis of recursive functions
-- Space complexity and stack usage
-- Common recursive patterns (factorial, fibonacci, etc.)
+- **Time complexity analysis** of recursive functions
+- Advanced recursive patterns (factorial, fibonacci, etc.)
 - Tail recursion optimization
+- When to choose recursion vs iteration
