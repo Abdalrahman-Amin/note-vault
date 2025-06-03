@@ -449,8 +449,218 @@ Returning: [n][n-1]...[0] → [n][n-1]...[1] → ... → [n] → []
 
 ---
 
+## ⏱️ Time Complexity Analysis of Recursive Functions
+
+### 🔤 Basic Concept: Unit Time Assumption
+
+**Fundamental Principle**: Every statement in a program takes **1 unit of time** to execute.
+
+#### Real-World Analogy:
+```
+📚 Moving Books Example:
+- Moving 1 book to shelf = 1 unit of time
+- Moving 10 books to shelf = 10 units of time  
+- Moving n books to shelf = n units of time
+
+💰 Currency Analogy:
+- We say "1 unit" instead of "1 dollar/rupee/pound"
+- The actual value may vary, but the unit concept remains
+```
+
+### Why Unit Time?
+- **Simplification**: Avoids dealing with actual seconds/milliseconds
+- **Universality**: Works regardless of hardware/person speed
+- **Focus**: Concentrates on algorithm efficiency, not implementation details
+
+---
+
+## 📊 Method 1: Tree-Based Analysis
+
+### For fun1(n):
+```c
+void fun1(int n) {
+    if (n > 0) {        // 1 unit
+        printf("%d ", n);    // 1 unit  
+        fun1(n - 1);         // 1 unit (statement execution)
+    }
+}
+```
+
+### Counting Operations:
+```
+fun1(3) calls:
+├── fun1(3): prints 3 (1 unit)
+├── fun1(2): prints 2 (1 unit)  
+├── fun1(1): prints 1 (1 unit)
+└── fun1(0): does nothing (but still checks condition: 1 unit)
+
+Total printf operations: 3 (for n=3)
+For general n: n printf operations
+```
+
+### Time Complexity: **O(n)**
+- **Operations counted**: Number of printf statements  
+- **For fun1(n)**: n print operations
+- **Time complexity**: O(n)
+
+---
+
+## 🔢 Method 2: Recurrence Relation
+
+### Step 1: Define T(n)
+**T(n)** = Total time taken by function with parameter n
+
+### Step 2: Analyze Statements
+```c
+void fun1(int n) {
+    if (n > 0) {        // 1 unit time
+        printf("%d ", n);    // 1 unit time
+        fun1(n - 1);         // T(n-1) time (NOT 1 unit!)
+    }
+}
+```
+
+### Step 3: Form Recurrence Relation
+```
+For n > 0:
+T(n) = 1 + 1 + T(n-1)
+T(n) = T(n-1) + 2
+
+For n = 0:
+T(0) = 1 (only condition checking)
+```
+
+### Step 4: Solve Using Successive Substitution
+
+#### Substitution Process:
+```
+T(n) = T(n-1) + 2                    ... (1)
+
+Substitute T(n-1):
+T(n-1) = T(n-2) + 2
+So: T(n) = T(n-2) + 2 + 2 = T(n-2) + 4    ... (2)
+
+Substitute T(n-2):  
+T(n-2) = T(n-3) + 2
+So: T(n) = T(n-3) + 2 + 4 = T(n-3) + 6    ... (3)
+
+General pattern after k substitutions:
+T(n) = T(n-k) + 2k                   ... (4)
+```
+
+#### Find Base Case:
+```
+We want to reach T(0) = 1
+Set: n - k = 0
+Therefore: k = n
+
+Substitute k = n in equation (4):
+T(n) = T(n-n) + 2n
+T(n) = T(0) + 2n  
+T(n) = 1 + 2n
+```
+
+### Final Result: **T(n) = 2n + 1 = O(n)**
+
+---
+
+## 📈 Simplified Recurrence Analysis
+
+### For Cleaner Analysis:
+If we consider only the dominant operations (printf statements):
+```
+T(n) = T(n-1) + 1  (1 unit for printf)
+T(0) = 0           (no printf when n=0)
+
+Solution: T(n) = n = O(n)
+```
+
+### Verification with Tree Method:
+```
+Tree Analysis: n printf operations
+Recurrence: T(n) = n  
+✅ Both methods give O(n)
+```
+
+---
+
+## 🎯 Time Complexity Summary
+
+### Both Functions Have Same Complexity:
+| Function | Operations | Time Complexity |
+|----------|------------|-----------------|
+| fun1(n) | n printf calls | O(n) |
+| fun2(n) | n printf calls | O(n) |
+
+### Why Same Complexity?
+- **Same number of function calls**: n + 1 calls for both
+- **Same number of printf operations**: n operations for both  
+- **Only difference**: When printf executes (calling vs returning phase)
+- **Complexity**: Depends on total operations, not their timing
+
+---
+
+## 🛠️ Recurrence Relation Method - Step by Step
+
+### General Process:
+1. **Define T(n)**: Total time for input size n
+2. **Analyze statements**: Count unit times, identify recursive calls
+3. **Form recurrence**: Express T(n) in terms of T(smaller_input)
+4. **Identify base case**: Usually T(0) or T(1)
+5. **Solve**: Use successive substitution
+6. **Express in Big O**: Remove constants and lower-order terms
+
+### Common Patterns:
+```
+T(n) = T(n-1) + c     →  O(n)     (Linear)
+T(n) = T(n-1) + n     →  O(n²)    (Quadratic)  
+T(n) = 2T(n-1) + c    →  O(2ⁿ)    (Exponential)
+T(n) = T(n/2) + c     →  O(log n) (Logarithmic)
+```
+
+---
+
+## 💡 Key Insights
+
+### Method Comparison:
+| Method | Advantages | Best For |
+|--------|------------|----------|
+| **Tree Analysis** | Visual, intuitive | Simple recursive patterns |
+| **Recurrence Relations** | Mathematical, precise | Complex recursions |
+
+### Important Notes:
+- **Both methods should give same result**
+- **Recurrence relations handle complex cases better**
+- **Tree analysis is more intuitive for beginners**
+- **Time complexity focuses on growth rate, not exact time**
+
+### Why O(n) Notation?
+- **T(n) = 2n + 1**: Degree of polynomial is 1
+- **Big O**: Focuses on highest-order term
+- **Result**: O(n) - linear time complexity
+
+---
+
+## 📚 Chapter Summary
+
+### What We've Learned:
+1. **Recursion Basics**: Function calling itself with base condition
+2. **Two Phases**: Calling (ascending) and returning (descending)  
+3. **Stack Usage**: O(n) space complexity due to activation records
+4. **Time Analysis**: Two methods giving O(n) time complexity
+5. **Memory vs Time**: Space O(n), Time O(n) for these examples
+
+### Key Takeaways:
+- **Recursion trades space for elegance**
+- **Always analyze both time and space complexity**
+- **Multiple methods can verify your analysis**
+- **Understanding stack behavior helps with debugging**
+
+---
+
 ## 🔗 Next Topics
-- **Time complexity analysis** of recursive functions
-- Advanced recursive patterns (factorial, fibonacci, etc.)
-- Tail recursion optimization
-- When to choose recursion vs iteration
+- **Advanced recursive patterns** (factorial, fibonacci, etc.)
+- **Big O, Omega, and Theta notations** detailed explanation
+- **Tail recursion optimization**
+- **When to choose recursion vs iteration**
+- **More complex recurrence relations**
