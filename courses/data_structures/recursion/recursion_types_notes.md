@@ -119,8 +119,117 @@ void fun(int n) {
 
 ---
 
+## 4. Head Recursion
+
+### Definition
+**Head Recursion** occurs when a recursive function calls itself as the **first statement** in the function, with all processing/operations performed **after** the recursive call returns.
+
+### Key Characteristics
+- The recursive call is the **first operation**
+- **No processing** happens during the calling phase
+- **All operations** are performed during the **returning phase**
+- Function must wait for recursive calls to complete before doing any work
+
+### Structure of Head Recursion
+```cpp
+void fun(int n) {
+    if (n > 0) {
+        fun(n - 1);        // First statement - recursive call
+        printf("%d ", n);  // Processing after recursive call
+    }
+}
+```
+
+### Example Analysis
+For `fun(3)`, the execution flow:
+1. **Calling Phase:** `fun(3)` → `fun(2)` → `fun(1)` → `fun(0)`
+2. **Returning Phase:** Print 1 → Print 2 → Print 3
+3. **Output:** `1 2 3`
+
+### What Makes It Head Recursion?
+- **✅ Valid Head Recursion:** No statements before the recursive call
+- **❌ Not Head Recursion:** Any operation before the recursive call
+```cpp
+// NOT Head Recursion
+void fun(int n) {
+    if (n > 0) {
+        printf("Before call\n");  // Operation before recursive call
+        fun(n - 1);
+        printf("%d ", n);
+    }
+}
+```
+
+---
+
+## 5. Head Recursion vs Loops
+
+### Conversion Difficulty
+Head recursion **cannot be easily converted** to loops in a straightforward manner.
+
+### Direct Conversion Attempt (Doesn't Work)
+```cpp
+// Head Recursive Version
+void fun(int n) {
+    if (n > 0) {
+        fun(n - 1);
+        printf("%d ", n);
+    }
+}
+// Output: 1 2 3
+
+// Attempted Direct Loop Conversion
+void fun(int n) {
+    while (n > 0) {
+        printf("%d ", n);  // This prints 3 2 1, not 1 2 3
+        n--;
+    }
+}
+// Output: 3 2 1 (Wrong!)
+```
+
+### Correct Loop Equivalent
+To achieve the same output (`1 2 3`), we need a different approach:
+```cpp
+void fun(int n) {
+    for (int i = 1; i <= n; i++) {
+        printf("%d ", i);
+    }
+}
+// Output: 1 2 3 (Correct!)
+```
+
+### Key Insight
+- The loop version looks **completely different** from the recursive structure
+- **Direct structural conversion** is not possible
+- We need to **redesign the logic** to achieve the same result
+
+---
+
+## 6. Comparison: Tail vs Head Recursion
+
+| Aspect | Tail Recursion | Head Recursion |
+|--------|----------------|----------------|
+| **Recursive Call Position** | Last statement | First statement |
+| **Processing Phase** | During calling | During returning |
+| **Loop Conversion** | Easy & direct | Difficult & indirect |
+| **Structure Similarity** | Maintains similar structure | Requires complete redesign |
+| **Execution Order** | Forward (3→2→1) | Reverse (1→2→3) |
+
+---
+
+## Key Takeaways
+
+1. **Head recursion** = recursive call is the **first statement**
+2. **All processing** happens during the **returning phase**
+3. **Cannot be easily converted** to loops (unlike tail recursion)
+4. **Loop equivalents** require completely different logic structure
+5. **Execution pattern** creates reverse order output compared to input
+6. **Structural conversion** is not straightforward - requires algorithmic redesign
+
+---
+
 ## Next Topics
-- Head Recursion
-- Tree Recursion  
+- Tree Recursion
 - Indirect Recursion
 - Nested Recursion
