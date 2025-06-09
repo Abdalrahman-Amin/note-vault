@@ -229,7 +229,167 @@ void fun(int n) {
 
 ---
 
+## 7. Tree Recursion
+
+### Definition
+**Tree Recursion** occurs when a recursive function calls itself **more than one time** within the same function call.
+
+### Linear vs Tree Recursion
+
+| **Linear Recursion** | **Tree Recursion** |
+|---------------------|-------------------|
+| Function calls itself **only once** | Function calls itself **multiple times** |
+| Creates a linear call sequence | Creates a tree-like call structure |
+| Examples: Tail, Head recursion | Example: Fibonacci, binary tree traversals |
+
+### Structure Comparison
+```cpp
+// Linear Recursion (calls itself once)
+void linearRecursion(int n) {
+    if (n > 0) {
+        // Some processing
+        linearRecursion(n - 1);  // Single recursive call
+        // Some processing
+    }
+}
+
+// Tree Recursion (calls itself multiple times)
+void treeRecursion(int n) {
+    if (n > 0) {
+        printf("%d ", n);
+        treeRecursion(n - 1);    // First recursive call
+        treeRecursion(n - 1);    // Second recursive call
+    }
+}
+```
+
+---
+
+## 8. Tree Recursion Example Analysis
+
+### Function Tracing
+For `treeRecursion(3)`, let's trace the execution:
+
+```
+Call Tree Structure:
+                    fun(3)
+                   /      \
+               fun(2)      fun(2)
+              /     \     /     \
+          fun(1)  fun(1) fun(1) fun(1)
+          /   \   /   \  /   \  /   \
+      fun(0) fun(0) fun(0) fun(0) fun(0) fun(0) fun(0) fun(0)
+```
+
+### Execution Order and Output
+The calls are made in this order:
+1. `fun(3)` → prints **3**
+2. `fun(2)` → prints **2** 
+3. `fun(1)` → prints **1**
+4. `fun(0)` → terminates
+5. `fun(0)` → terminates
+6. `fun(1)` → prints **1**
+7. `fun(0)` → terminates
+8. `fun(0)` → terminates
+9. `fun(2)` → prints **2**
+10. `fun(1)` → prints **1**
+11. `fun(0)` → terminates
+12. `fun(0)` → terminates
+13. `fun(1)` → prints **1**
+14. `fun(0)` → terminates
+15. `fun(0)` → terminates
+
+**Final Output:** `3 2 1 1 2 1 1`
+
+### Stack Analysis
+- **Maximum stack height:** 4 activation records (for path: fun(3) → fun(2) → fun(1) → fun(0))
+- **Total function calls:** 15 calls
+- **Stack reuse:** Same memory locations are reused as functions return
+
+---
+
+## 9. Complexity Analysis
+
+### Time Complexity Calculation
+
+**Level-wise call count for `n = 3`:**
+- Level 0: 1 call (`fun(3)`)
+- Level 1: 2 calls (`fun(2)`, `fun(2)`)
+- Level 2: 4 calls (`fun(1)` × 4)
+- Level 3: 8 calls (`fun(0)` × 8)
+
+**Total calls:** `1 + 2 + 4 + 8 = 15`
+
+**Mathematical representation:**
+```
+Total calls = 2⁰ + 2¹ + 2² + 2³ + ... + 2ⁿ
+            = 2^(n+1) - 1
+            = O(2ⁿ)
+```
+
+**For `n = 3`:** `2^(3+1) - 1 = 2⁴ - 1 = 16 - 1 = 15` ✓
+
+### Space Complexity Analysis
+- **Space required:** Equal to the **maximum height** of the recursion tree
+- **Maximum height:** `n + 1` levels (from `fun(n)` to `fun(0)`)
+- **Space complexity:** **O(n)**
+
+### Complexity Summary
+| Aspect | Complexity | Explanation |
+|--------|------------|-------------|
+| **Time** | **O(2ⁿ)** | Exponential due to repeated subproblems |
+| **Space** | **O(n)** | Linear based on maximum recursion depth |
+
+---
+
+## 10. Tree Recursion Characteristics
+
+### Key Properties
+1. **Exponential time complexity** - Very inefficient for large inputs
+2. **Linear space complexity** - Stack depth equals input size
+3. **Repeated computations** - Same subproblems solved multiple times
+4. **Tree-like structure** - Creates branching call patterns
+
+### Visual Representation
+```
+Tree Structure for treeRecursion(3):
+
+Level 0:           [3]
+                  /   \
+Level 1:        [2]   [2]
+               /  \   /  \
+Level 2:     [1] [1] [1] [1]
+            / |  | \/ |  | \
+Level 3:  [0][0][0][0][0][0][0][0]
+```
+
+### Memory Usage Pattern
+- **Activation records created:** 15 total
+- **Maximum simultaneous records:** 4
+- **Stack reuse:** High (same memory locations reused)
+
+---
+
+## 11. Important Notes
+
+### Performance Implications
+- **Exponential growth:** For `n = 10`, approximately 1,024 function calls
+- **Inefficiency:** Many redundant calculations
+- **Use cases:** Educational purposes, understanding recursion patterns
+
+### Optimization Opportunities
+- **Memoization:** Store results of subproblems
+- **Dynamic Programming:** Bottom-up approach
+- **Iterative solutions:** Convert to loops where possible
+
+### Real-world Applications
+- **Fibonacci sequence** (classic tree recursion example)
+- **Binary tree traversals**
+- **Divide and conquer algorithms**
+- **Backtracking problems**
+
+---
+
 ## Next Topics
-- Tree Recursion
 - Indirect Recursion
 - Nested Recursion
