@@ -390,6 +390,168 @@ Level 3:  [0][0][0][0][0][0][0][0]
 
 ---
 
+## 12. Indirect Recursion
+
+### Definition
+**Indirect Recursion** occurs when multiple functions call each other in a **circular fashion**, creating a cycle where functions don't call themselves directly but call each other to form a recursive pattern.
+
+### Key Characteristics
+- **Multiple functions** involved (2 or more)
+- **Circular calling pattern:** A → B → C → A (forms a cycle)
+- **No direct self-calling:** Functions call other functions, not themselves
+- **Mutual recursion:** Functions are mutually dependent
+
+### Basic Structure
+```cpp
+// Simple two-function indirect recursion
+void functionA(int n) {
+    if (condition) {
+        // Some processing
+        functionB(modified_n);  // Calls function B
+    }
+}
+
+void functionB(int n) {
+    if (condition) {
+        // Some processing
+        functionA(modified_n);  // Calls function A back
+    }
+}
+```
+
+### Circular Call Pattern
+```
+Function A → Function B → Function C → Function A
+    ↑                                        ↓
+    ←←←←←←←←← (Cycle repeats) ←←←←←←←←←←←←←←←
+```
+
+---
+
+## 13. Indirect Recursion Example
+
+### Code Implementation
+```cpp
+void funA(int n) {
+    if (n > 0) {
+        printf("%d ", n);
+        funB(n - 1);  // Calls function B with n-1
+    }
+}
+
+void funB(int n) {
+    if (n > 1) {
+        printf("%d ", n);
+        funA(n / 2);  // Calls function A with n/2
+    }
+}
+```
+
+### Execution Trace for `funA(20)`
+
+| Step | Function | Input | Condition | Action | Output |
+|------|----------|-------|-----------|---------|--------|
+| 1 | `funA` | 20 | 20 > 0 ✓ | Print 20, call `funB(19)` | **20** |
+| 2 | `funB` | 19 | 19 > 1 ✓ | Print 19, call `funA(9)` | **19** |
+| 3 | `funA` | 9 | 9 > 0 ✓ | Print 9, call `funB(8)` | **9** |
+| 4 | `funB` | 8 | 8 > 1 ✓ | Print 8, call `funA(4)` | **8** |
+| 5 | `funA` | 4 | 4 > 0 ✓ | Print 4, call `funB(3)` | **4** |
+| 6 | `funB` | 3 | 3 > 1 ✓ | Print 3, call `funA(1)` | **3** |
+| 7 | `funA` | 1 | 1 > 0 ✓ | Print 1, call `funB(0)` | **1** |
+| 8 | `funB` | 0 | 0 > 1 ✗ | **Terminate** | - |
+
+**Final Output:** `20 19 9 8 4 3 1`
+
+### Call Stack Visualization
+```
+funA(20) → funB(19) → funA(9) → funB(8) → funA(4) → funB(3) → funA(1) → funB(0)
+    ↑                                                                        ↓
+    ←←←←←←←←←←←←←←← (Returns back through the chain) ←←←←←←←←←←←←←←←←←←←←←←←←←
+```
+
+---
+
+## 14. Indirect Recursion Analysis
+
+### Pattern Recognition
+The example shows an interesting pattern:
+- **Function A:** Reduces by 1 (n → n-1)
+- **Function B:** Reduces by half (n → n/2) 
+- **Different reduction rates** create unique sequence patterns
+
+### Termination Conditions
+- **Function A:** Stops when `n ≤ 0`
+- **Function B:** Stops when `n ≤ 1`
+- **Both conditions must be met** for complete termination
+
+### Advantages
+- **Problem decomposition:** Different functions handle different aspects
+- **Code organization:** Separates logic into distinct functions
+- **Mutual dependency:** Functions work together to solve complex problems
+
+### Disadvantages
+- **Complexity:** Harder to trace and debug
+- **Stack overhead:** Multiple function calls increase memory usage
+- **Interdependency:** Functions are tightly coupled
+
+---
+
+## 15. Indirect vs Direct Recursion
+
+| Aspect | Direct Recursion | Indirect Recursion |
+|--------|------------------|-------------------|
+| **Function calls** | Function calls itself | Functions call each other |
+| **Structure** | Single function | Multiple functions |
+| **Cycle** | Self-referential | Circular chain |
+| **Tracing** | Easier to follow | More complex to trace |
+| **Use cases** | Single problem | Multi-aspect problems |
+
+---
+
+## 16. Applications of Indirect Recursion
+
+### Common Use Cases
+1. **State machines** - Different states call different functions
+2. **Parsing algorithms** - Different grammar rules call each other
+3. **Game development** - Different game states interact
+4. **Compiler design** - Different parsing phases call each other
+
+### Example Applications
+```cpp
+// State machine example
+void stateA() {
+    // Process state A
+    if (condition) stateB();
+}
+
+void stateB() {
+    // Process state B  
+    if (condition) stateA();
+}
+
+// Parser example
+void parseExpression() {
+    // Parse expression
+    parseTerm();
+}
+
+void parseTerm() {
+    // Parse term
+    if (hasOperator) parseExpression();
+}
+```
+
+---
+
+## Key Takeaways
+
+1. **Indirect recursion** involves **multiple functions** calling each other cyclically
+2. **Circular pattern** creates the recursive behavior without direct self-calls
+3. **Complex tracing** due to function switching makes debugging challenging
+4. **Useful for problems** requiring different processing logic at different stages
+5. **Termination requires** careful condition checking in all involved functions
+
+---
+
 ## Next Topics
-- Indirect Recursion
 - Nested Recursion
