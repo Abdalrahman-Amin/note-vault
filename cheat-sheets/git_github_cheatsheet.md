@@ -1,6 +1,7 @@
 # 🚀 Ultimate Git & GitHub Cheat Sheet
 
 ## 📋 Table of Contents
+
 - [Git Basics](#git-basics)
 - [Repository Management](#repository-management)
 - [Branching & Merging](#branching--merging)
@@ -20,6 +21,7 @@
 ## 🎯 Git Basics
 
 ### Initial Setup
+
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
@@ -27,6 +29,7 @@ git config --global init.defaultBranch main
 ```
 
 ### Create Repository
+
 ```bash
 git init                    # Initialize new repo
 git clone <url>            # Clone existing repo
@@ -38,6 +41,7 @@ git clone <url> <folder>   # Clone to specific folder
 ## 📁 Repository Management
 
 ### Status & Information
+
 ```bash
 git status                 # Show working tree status
 git status -s             # Short status format
@@ -56,6 +60,7 @@ git diff HEAD             # Show all changes since last commit
 ## 🌿 Branching & Merging
 
 ### Branch Operations
+
 ```bash
 git branch                    # List local branches
 git branch -a                # List all branches (local + remote)
@@ -71,6 +76,7 @@ git branch -m <old> <new>    # Rename branch
 ```
 
 ### Merging
+
 ```bash
 git merge <branch>           # Merge branch into current
 git merge --no-ff <branch>   # Merge with merge commit
@@ -85,8 +91,10 @@ git cherry-pick <commit>     # Apply specific commit
 ## 🌐 Remote Operations
 
 ### Remote Management
+
 ```bash
 git remote                   # List remotes
+git ls-remote                #List all remotes branches
 git remote -v               # List remotes with URLs
 git remote add <name> <url> # Add remote
 git remote remove <name>    # Remove remote
@@ -95,6 +103,7 @@ git remote set-url <name> <url> # Change remote URL
 ```
 
 ### Sync Operations
+
 ```bash
 git fetch                   # Fetch from all remotes
 git fetch <remote>         # Fetch from specific remote
@@ -112,6 +121,7 @@ git push --tags           # Push tags
 ## 📝 Staging & Committing
 
 ### Staging Files
+
 ```bash
 git add <file>             # Stage specific file
 git add .                  # Stage all changes
@@ -123,6 +133,7 @@ git mv <old> <new>        # Move/rename and stage
 ```
 
 ### Committing
+
 ```bash
 git commit -m "message"    # Commit with message
 git commit -am "message"   # Stage and commit all tracked files
@@ -136,6 +147,7 @@ git commit --no-verify     # Skip pre-commit hooks
 ## 📚 History & Logs
 
 ### Viewing History
+
 ```bash
 git log --oneline                    # Compact format
 git log --graph --decorate --all     # Visual graph of all branches
@@ -150,6 +162,7 @@ git shortlog                        # Summary by author
 ```
 
 ### Searching
+
 ```bash
 git grep "pattern"                  # Search in tracked files
 git log -S "code"                   # Search for code changes
@@ -161,6 +174,7 @@ git log --pickaxe-regex -S "regex"  # Regex search in changes
 ## ↩️ Undoing Changes
 
 ### Working Directory
+
 ```bash
 git checkout -- <file>     # Discard changes in file
 git checkout .            # Discard all changes
@@ -170,6 +184,7 @@ git clean -fd            # Remove untracked files and directories
 ```
 
 ### Staging Area
+
 ```bash
 git reset <file>          # Unstage file
 git reset                # Unstage all files
@@ -177,6 +192,7 @@ git restore --staged <file> # Modern way to unstage
 ```
 
 ### Commits
+
 ```bash
 git reset --soft HEAD~1   # Undo last commit, keep changes staged
 git reset HEAD~1          # Undo last commit, unstage changes
@@ -190,6 +206,7 @@ git revert HEAD          # Revert last commit
 ## 💾 Stashing
 
 ### Basic Stashing
+
 ```bash
 git stash                 # Stash current changes
 git stash push -m "message" # Stash with message
@@ -204,6 +221,7 @@ git stash clear          # Delete all stashes
 ```
 
 ### Advanced Stashing
+
 ```bash
 git stash -u             # Include untracked files
 git stash -a             # Include all files (even ignored)
@@ -216,6 +234,7 @@ git stash branch <name>  # Create branch from stash
 ## 🏷️ Tags
 
 ### Creating Tags
+
 ```bash
 git tag                   # List all tags
 git tag <tagname>        # Create lightweight tag
@@ -224,6 +243,7 @@ git tag -a <tagname> <commit> # Tag specific commit
 ```
 
 ### Managing Tags
+
 ```bash
 git show <tagname>       # Show tag information
 git tag -d <tagname>     # Delete local tag
@@ -237,6 +257,7 @@ git push origin --delete <tagname> # Delete remote tag
 ## 🐙 GitHub Specific
 
 ### Repository Operations
+
 ```bash
 # Clone with SSH
 git clone git@github.com:username/repo.git
@@ -249,6 +270,7 @@ git push -u origin main
 ```
 
 ### GitHub CLI (gh)
+
 ```bash
 gh repo create <name>    # Create repository
 gh repo clone <repo>     # Clone repository
@@ -261,6 +283,7 @@ gh issue list           # List issues
 ```
 
 ### Workflows & Actions
+
 ```bash
 # Check workflow status
 gh run list
@@ -277,6 +300,7 @@ gh run download <run-id>
 ## 🔥 Advanced Git
 
 ### Interactive Rebase
+
 ```bash
 git rebase -i HEAD~3     # Interactive rebase last 3 commits
 # Commands in interactive mode:
@@ -289,6 +313,7 @@ git rebase -i HEAD~3     # Interactive rebase last 3 commits
 ```
 
 ### Bisect (Binary Search for Bugs)
+
 ```bash
 git bisect start         # Start bisecting
 git bisect bad          # Mark current commit as bad
@@ -297,6 +322,7 @@ git bisect reset        # End bisecting session
 ```
 
 ### Worktrees
+
 ```bash
 git worktree add <path> <branch>  # Create new worktree
 git worktree list                 # List worktrees
@@ -304,6 +330,7 @@ git worktree remove <path>        # Remove worktree
 ```
 
 ### Submodules
+
 ```bash
 git submodule add <url> <path>    # Add submodule
 git submodule init               # Initialize submodules
@@ -316,6 +343,7 @@ git submodule update --recursive # Update nested submodules
 ## ⚙️ Git Configuration
 
 ### Configuration Levels
+
 ```bash
 git config --system     # System-wide config
 git config --global     # User-wide config
@@ -323,6 +351,7 @@ git config --local      # Repository config
 ```
 
 ### Useful Settings
+
 ```bash
 # Editor
 git config --global core.editor "code --wait"
@@ -353,6 +382,7 @@ git config --global push.default simple
 ## 🚨 Troubleshooting
 
 ### Common Issues
+
 ```bash
 # Merge conflicts
 git status              # See conflicted files
@@ -381,6 +411,7 @@ git merge upstream/main
 ```
 
 ### Recovery Commands
+
 ```bash
 git reflog              # Show reference log
 git fsck --lost-found   # Find orphaned commits
@@ -393,6 +424,7 @@ git prune               # Remove unreachable objects
 ## 🎨 Git Flow Commands
 
 ### Feature Development
+
 ```bash
 git flow init           # Initialize git flow
 git flow feature start <name>  # Start new feature
@@ -401,6 +433,7 @@ git flow feature publish <name> # Publish feature
 ```
 
 ### Releases
+
 ```bash
 git flow release start <version>  # Start release
 git flow release finish <version> # Finish release
@@ -411,6 +444,7 @@ git flow release finish <version> # Finish release
 ## 📋 Quick Reference Patterns
 
 ### Daily Workflow
+
 ```bash
 git pull                # Get latest changes
 git checkout -b feature/new-feature  # Create feature branch
@@ -425,6 +459,7 @@ git branch -d feature/new-feature  # Delete feature branch
 ```
 
 ### Emergency Hotfix
+
 ```bash
 git checkout main
 git pull
@@ -437,6 +472,7 @@ git push -u origin hotfix/critical-bug
 ```
 
 ### Collaboration Workflow
+
 ```bash
 git clone <repo-url>   # Clone project
 git checkout -b my-feature  # Create feature branch
@@ -464,4 +500,4 @@ git push --force-with-lease # Push rebased branch
 
 ---
 
-*Remember: Git is powerful but can be dangerous. Always make backups of important work before complex operations!*
+_Remember: Git is powerful but can be dangerous. Always make backups of important work before complex operations!_
